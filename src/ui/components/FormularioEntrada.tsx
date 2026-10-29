@@ -14,11 +14,11 @@ export function FormularioEntrada({ s }: { s: Simulacao }) {
 
   return (
     <form
-      className="flex flex-col gap-4"
+      className="cartao flex flex-col gap-4 p-5 lg:sticky lg:top-24 lg:self-start"
       aria-label="Dados da administradora"
       onSubmit={(e) => e.preventDefault()}
     >
-      <h2 className="text-xl font-semibold">Dados da administradora</h2>
+      <h2 className="text-lg font-bold tracking-tight">Dados da administradora</h2>
       <Campo
         rotulo="Nome da administradora"
         tipo="texto"

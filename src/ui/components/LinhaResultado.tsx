@@ -12,9 +12,9 @@ export function LinhaResultado({ rotulo, periodo, valor, explicacao }: Props) {
         <span className="font-medium">
           {rotulo} <span className="text-sm font-normal">({periodo})</span>
         </span>
-        <span className="text-xl font-semibold">{valor}</span>
+        <span className="text-xl font-bold">{valor}</span>
       </div>
-      {explicacao ? <p className="text-sm">{explicacao}</p> : null}
+      {explicacao ? <p className="text-sm opacity-80">{explicacao}</p> : null}
     </div>
   )
 }

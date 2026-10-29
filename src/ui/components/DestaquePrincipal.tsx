@@ -9,9 +9,11 @@ export function DestaquePrincipal({ totalAnual, premio, totalPrimeiroAno, aprese
   return (
     <section
       aria-label="Destaque principal"
-      className="rounded-2xl border-l-8 border-acento bg-destaque p-6 text-sobre-destaque"
+      className="rounded-2xl border-l-8 border-acento bg-destaque p-6 text-sobre-destaque shadow-[var(--sombra-elevada)] md:p-8"
     >
-      <p className="text-base">Total anual recorrente (por ano)</p>
+      <p className="text-sm font-semibold uppercase tracking-wider">
+        Total anual recorrente (por ano)
+      </p>
       <p
         data-testid="total-anual"
         className={`font-bold text-valor-destaque ${apresentacao ? 'text-[72px] leading-tight' : 'text-[48px] leading-tight'}`}

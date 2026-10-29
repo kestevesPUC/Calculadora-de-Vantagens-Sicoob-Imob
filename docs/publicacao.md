@@ -45,4 +45,4 @@ A versão do `package.json` precisa ser **maior** que a instalada. Nunca reaprov
 
 - Teste cada versão instalando por cima da anterior (os usuários devem continuar lá).
 - O executável não é assinado: o SmartScreen pode avisar na primeira instalação ("Mais informações → Executar assim mesmo").
-- O ícone usa o padrão do Electron até existir `build/icon.png`.
+- O ícone do instalador e do atalho vem de `build/icon.png` (a janela usa `electron/icone.png`, a mesma imagem).

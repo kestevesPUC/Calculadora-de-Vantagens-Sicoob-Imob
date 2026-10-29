@@ -35,44 +35,57 @@ export function TelaLogin({ onEntrar }: Props) {
   }
 
   return (
-    <main className="mx-auto flex min-h-screen max-w-md flex-col justify-center gap-6 px-4">
-      <Logo />
-      <h1 className="font-titulo text-3xl font-bold">Calculadora de Vantagens</h1>
-      <form onSubmit={enviar} className="flex flex-col gap-4" aria-label="Entrar">
-        <Campo
-          rotulo="Usuário"
-          tipo="texto"
-          valor={usuario}
-          onChange={setUsuario}
-          onBlur={() => undefined}
-        />
-        <div className="flex flex-col gap-1">
-          <label htmlFor="senha" className="font-medium">
-            Senha
-          </label>
-          <input
-            id="senha"
-            type="password"
-            value={senha}
-            onChange={(e) => setSenha(e.target.value)}
-            autoComplete="current-password"
-            className="min-h-11 rounded-xl border-2 border-borda-campo bg-fundo px-3"
-          />
+    <main className="auth">
+      <section className="hero">
+        <Logo />
+        <h1>Calculadora de Vantagens</h1>
+        <p>
+          Mostre em reais quanto a administradora ganha sendo cooperada: prêmio, sobras e economia.
+        </p>
+      </section>
+      <section className="painel">
+        <div className="w-full max-w-sm">
+          <div className="mb-5">
+            <h2 className="text-2xl font-bold">Bem-vindo de volta</h2>
+            <p className="mt-1 opacity-70">Acesse a calculadora com seu usuário.</p>
+          </div>
+          <form onSubmit={enviar} className="flex flex-col gap-4" aria-label="Entrar">
+            <Campo
+              rotulo="Usuário"
+              tipo="texto"
+              valor={usuario}
+              onChange={setUsuario}
+              onBlur={() => undefined}
+            />
+            <div className="flex flex-col gap-1">
+              <label htmlFor="senha" className="text-sm font-semibold">
+                Senha
+              </label>
+              <input
+                id="senha"
+                type="password"
+                value={senha}
+                onChange={(e) => setSenha(e.target.value)}
+                autoComplete="current-password"
+                className="campo-caixa min-h-11 rounded-xl border-2 border-linha bg-fundo px-3 hover:border-borda-campo focus-visible:outline-none"
+              />
+            </div>
+            {erro ? (
+              <p role="alert" className="font-medium text-erro">
+                {erro}
+              </p>
+            ) : null}
+            <Botao
+              type="submit"
+              variante="primario"
+              disabled={carregando || !usuario || !senha}
+              icone={<LogIn size={18} aria-hidden="true" />}
+            >
+              Entrar
+            </Botao>
+          </form>
         </div>
-        {erro ? (
-          <p role="alert" className="font-medium text-erro">
-            {erro}
-          </p>
-        ) : null}
-        <Botao
-          type="submit"
-          variante="primario"
-          disabled={carregando || !usuario || !senha}
-          icone={<LogIn size={18} aria-hidden="true" />}
-        >
-          Entrar
-        </Botao>
-      </form>
+      </section>
     </main>
   )
 }

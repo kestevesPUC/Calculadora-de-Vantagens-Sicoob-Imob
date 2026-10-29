@@ -19,7 +19,10 @@ export function RelatorioImpressao({
     ['Sobras da cobrança (por ano)', formatarMoeda(r.retornoCobranca)],
     ['Sobras do depósito à vista (por ano)', formatarMoeda(r.retornoDAV)],
     ['Sobras dos investimentos (por ano)', formatarMoeda(r.retornoInvestimentos)],
-    [`Conta capital, Selic ${formatarPercentual(e.selic)} (por ano)`, formatarMoeda(r.remuneracaoCapital)],
+    [
+      `Conta capital, Selic ${formatarPercentual(e.selic)} (por ano)`,
+      formatarMoeda(r.remuneracaoCapital),
+    ],
     ['Total anual recorrente (por ano)', formatarMoeda(r.totalAnualRecorrente)],
     ['Total no primeiro ano', formatarMoeda(r.totalPrimeiroAno)],
     ['Custo mensal de boletagem (por mês)', formatarMoeda(r.custoMensalBoletagem)],
@@ -35,7 +38,9 @@ export function RelatorioImpressao({
 
   return (
     <article className="hidden print:block" aria-hidden="true" data-testid="relatorio">
-      <Logo />
+      <div className="mb-4 w-fit rounded-xl bg-destaque text-sobre-destaque [print-color-adjust:exact]">
+        <Logo />
+      </div>
       <h1 className="text-2xl font-bold">Simulação de vantagens</h1>
       <p>
         {e.nomeAdministradora || 'Administradora'} — {new Date().toLocaleDateString('pt-BR')}

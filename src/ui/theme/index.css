@@ -54,11 +54,63 @@ body,
 }
 
 body {
-  background: var(--cor-fundo);
+  background: var(--cor-fundo-pagina);
   color: var(--cor-texto);
   font-family: 'Asap', Arial, sans-serif;
   font-size: 16px;
   font-variant-numeric: tabular-nums;
+}
+
+.cartao {
+  background: var(--cor-fundo);
+  border: 1px solid var(--cor-borda-suave);
+  border-radius: 1rem;
+  box-shadow: var(--sombra-cartao);
+}
+
+.campo-caixa input:focus-visible,
+input.campo-caixa:focus-visible,
+select.campo-caixa:focus-visible {
+  outline: none;
+}
+input.campo-caixa:focus,
+select.campo-caixa:focus {
+  border-color: var(--cor-foco);
+  box-shadow: 0 0 0 3px rgb(73 71 157 / 0.25);
+}
+
+.campo-caixa {
+  transition: box-shadow 0.15s, border-color 0.15s;
+}
+.campo-caixa:focus-within {
+  border-color: var(--cor-foco);
+  box-shadow: 0 0 0 3px rgb(73 71 157 / 0.25);
+}
+
+.aba {
+  position: relative;
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0 1rem;
+  font-weight: 600;
+  border-bottom: 4px solid transparent;
+  transition: background-color 0.15s, border-color 0.15s;
+}
+.aba:hover {
+  background: rgb(0 174 157 / 0.1);
+}
+.aba[aria-current='page'] {
+  border-bottom-color: var(--cor-acento);
+  background: rgb(0 174 157 / 0.12);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
 }
 
 :focus-visible {
@@ -69,5 +121,172 @@ body {
 @media print {
   .nao-imprimir {
     display: none !important;
+  }
+}
+
+/* Layout com barra lateral (mesma estrutura do CCP) */
+.shell {
+  display: grid;
+  grid-template-columns: 248px minmax(0, 1fr);
+  min-height: 100vh;
+}
+.lateral {
+  position: sticky;
+  top: 0;
+  display: flex;
+  height: 100vh;
+  flex-direction: column;
+  gap: 8px;
+  overflow-y: auto;
+  padding: 18px 12px;
+  background: var(--sicoob-verde-escuro);
+  color: #d4e4e6;
+}
+.lateral .marca {
+  margin: 0 0 12px;
+  border-bottom: 1px solid rgb(255 255 255 / 0.15);
+  padding: 0 0 8px;
+  text-align: center;
+  color: #fff;
+}
+.lateral .marca small {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+}
+.lateral nav {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 2px;
+}
+.lateral button {
+  display: flex;
+  min-height: 44px;
+  cursor: pointer;
+  align-items: center;
+  gap: 12px;
+  border-radius: 10px;
+  padding: 0 12px;
+  color: inherit;
+  text-align: left;
+  transition: background-color 0.15s;
+}
+.lateral button:hover {
+  background: rgb(255 255 255 / 0.08);
+  color: #fff;
+}
+.lateral nav button[aria-current='page'] {
+  background: rgb(0 174 157 / 0.28);
+  color: #fff;
+  font-weight: 600;
+  box-shadow: inset 4px 0 0 var(--cor-acento);
+}
+.lateral .rodape-lateral {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  border-top: 1px solid rgb(255 255 255 / 0.15);
+  padding-top: 12px;
+  font-size: 14px;
+}
+.lateral .quem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 8px;
+  color: #fff;
+}
+.lateral .avatar {
+  display: grid;
+  width: 32px;
+  height: 32px;
+  flex: none;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--cor-acento);
+  color: var(--sicoob-verde-escuro);
+  font-weight: 700;
+}
+.conteudo {
+  min-width: 0;
+  padding: 28px 32px 48px;
+}
+
+/* Login em duas colunas (mesma estrutura do CCP) */
+.auth {
+  display: grid;
+  min-height: 100vh;
+  grid-template-columns: 1.1fr 1fr;
+}
+.auth .hero {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 16px;
+  padding: 56px;
+  background: var(--sicoob-verde-escuro);
+  color: #fff;
+  border-right: 8px solid var(--cor-acento);
+}
+.auth .hero .logo-tile {
+  width: fit-content;
+  border-radius: 12px;
+  background: #fff;
+}
+.auth .hero h1 {
+  font-size: 34px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.auth .hero p {
+  max-width: 420px;
+  color: #d4e4e6;
+}
+.auth .painel {
+  display: grid;
+  place-items: center;
+  padding: 32px;
+}
+
+@media (max-width: 900px) {
+  .shell {
+    grid-template-columns: 1fr;
+  }
+  .lateral {
+    position: static;
+    height: auto;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .lateral .marca {
+    display: none;
+  }
+  .lateral nav {
+    order: 3;
+    width: 100%;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  .lateral .rodape-lateral {
+    margin-left: auto;
+    flex-direction: row;
+    border: 0;
+    padding: 0;
+  }
+  .conteudo {
+    padding: 18px 16px 40px;
+  }
+  .auth {
+    grid-template-columns: 1fr;
+  }
+  .auth .hero {
+    display: none;
+  }
+}
+@media print {
+  .lateral {
+    display: none;
   }
 }

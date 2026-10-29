@@ -26,7 +26,7 @@ export function PainelVantagens({ parametros: p, fatores, calculo, apresentacao 
         <div
           role="status"
           aria-disabled="true"
-          className="rounded-2xl border-2 border-dashed border-linha p-8 text-center opacity-70"
+          className="cartao border-dashed p-10 text-center text-base"
         >
           Corrija os campos para ver o resultado
         </div>
@@ -46,7 +46,7 @@ export function PainelVantagens({ parametros: p, fatores, calculo, apresentacao 
         totalPrimeiroAno={formatarMoeda(r.totalPrimeiroAno)}
       />
 
-      <section aria-label="Prêmio de abertura" className="rounded-2xl border-2 border-linha px-4">
+      <section aria-label="Prêmio de abertura" className="cartao px-5">
         <LinhaResultado
           rotulo="Prêmio de abertura"
           periodo="único"
@@ -55,8 +55,8 @@ export function PainelVantagens({ parametros: p, fatores, calculo, apresentacao 
         />
       </section>
 
-      <section aria-label="Sobras estimadas" className="rounded-2xl border-2 border-linha p-4">
-        <h3 className="text-xl font-semibold">Sobras estimadas por ano</h3>
+      <section aria-label="Sobras estimadas" className="cartao p-5">
+        <h3 className="text-lg font-bold tracking-tight">Sobras estimadas por ano</h3>
         <LinhaResultado
           rotulo="Cobrança"
           periodo="por ano"
@@ -79,7 +79,7 @@ export function PainelVantagens({ parametros: p, fatores, calculo, apresentacao 
         <p className="pt-2 text-sm">Sobras de crédito não consideradas nesta simulação.</p>
       </section>
 
-      <section aria-label="Conta capital" className="rounded-2xl border-2 border-linha px-4">
+      <section aria-label="Conta capital" className="cartao px-5">
         <LinhaResultado
           rotulo="Remuneração da conta capital"
           periodo="por ano"
@@ -88,8 +88,8 @@ export function PainelVantagens({ parametros: p, fatores, calculo, apresentacao 
         />
       </section>
 
-      <section aria-label="Custo da cobrança" className="rounded-2xl border-2 border-linha p-4">
-        <h3 className="text-xl font-semibold">Custo da cobrança</h3>
+      <section aria-label="Custo da cobrança" className="cartao p-5">
+        <h3 className="text-lg font-bold tracking-tight">Custo da cobrança</h3>
         <LinhaResultado
           rotulo="Custo mensal de boletagem"
           periodo="por mês"
@@ -108,8 +108,8 @@ export function PainelVantagens({ parametros: p, fatores, calculo, apresentacao 
       </section>
 
       {c ? (
-        <section aria-label="Comparação com o banco atual" className="rounded-2xl border-2 border-linha p-4">
-          <h3 className="text-xl font-semibold">Comparação com o banco atual</h3>
+        <section aria-label="Comparação com o banco atual" className="cartao p-5">
+          <h3 className="text-lg font-bold tracking-tight">Comparação com o banco atual</h3>
           <LinhaResultado
             rotulo={rotuloEconomia(c.economiaBoletos, 'Economia em boletos')}
             periodo="por ano"
@@ -129,8 +129,16 @@ export function PainelVantagens({ parametros: p, fatores, calculo, apresentacao 
       ) : null}
 
       <BlocoRecolhivel titulo="Seu perfil na cooperativa">
-        <LinhaResultado rotulo="Saldo médio em conta (estimado)" periodo="estimativa" valor={formatarMoeda(r.saldoMedioDAV)} />
-        <LinhaResultado rotulo="Valor investido (estimado)" periodo="estimativa" valor={formatarMoeda(r.valorInvestido)} />
+        <LinhaResultado
+          rotulo="Saldo médio em conta (estimado)"
+          periodo="estimativa"
+          valor={formatarMoeda(r.saldoMedioDAV)}
+        />
+        <LinhaResultado
+          rotulo="Valor investido (estimado)"
+          periodo="estimativa"
+          valor={formatarMoeda(r.valorInvestido)}
+        />
       </BlocoRecolhivel>
 
       <Aviso texto={p.textoAviso} vigencia={p.vigencia} />

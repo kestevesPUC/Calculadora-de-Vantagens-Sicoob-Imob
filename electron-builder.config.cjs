@@ -16,7 +16,7 @@ module.exports = {
   productName: 'Calculadora Sicoob Imob.vc',
   copyright: 'Desenvolvido por Kaio Gomes',
   // Lista permitida: nada além disto entra no instalador (evita .env com token, docs e dados).
-  files: ['dist/**/*', 'electron/**/*.cjs', 'package.json'],
+  files: ['dist/**/*', 'electron/**/*.cjs', 'electron/icone.png', 'package.json'],
   directories: { output: 'release' },
   ...(publish && { publish }),
   win: { target: ['nsis'] },

@@ -32,18 +32,33 @@ export function GestaoUsuarios() {
       await carregar()
     } catch (err) {
       const msg = err instanceof Error ? err.message : ''
-      setErro(msg.replace(/^Error invoking remote method '[^']+': Error: /, '') || 'Falha ao criar usuário')
+      setErro(
+        msg.replace(/^Error invoking remote method '[^']+': Error: /, '') ||
+          'Falha ao criar usuário',
+      )
     }
   }
 
   return (
     <div className="grid gap-6 lg:grid-cols-2">
-      <form onSubmit={criar} className="flex flex-col gap-4" aria-label="Novo usuário">
-        <h2 className="text-xl font-semibold">Novo usuário</h2>
-        <Campo rotulo="Usuário" tipo="texto" valor={form.usuario} onChange={(v) => setForm({ ...form, usuario: v })} onBlur={() => undefined} />
-        <Campo rotulo="Nome" tipo="texto" valor={form.nome} onChange={(v) => setForm({ ...form, nome: v })} onBlur={() => undefined} />
+      <form onSubmit={criar} className="cartao flex flex-col gap-4 p-5" aria-label="Novo usuário">
+        <h2 className="text-lg font-bold tracking-tight">Novo usuário</h2>
+        <Campo
+          rotulo="Usuário"
+          tipo="texto"
+          valor={form.usuario}
+          onChange={(v) => setForm({ ...form, usuario: v })}
+          onBlur={() => undefined}
+        />
+        <Campo
+          rotulo="Nome"
+          tipo="texto"
+          valor={form.nome}
+          onChange={(v) => setForm({ ...form, nome: v })}
+          onBlur={() => undefined}
+        />
         <div className="flex flex-col gap-1">
-          <label htmlFor="nova-senha" className="font-medium">
+          <label htmlFor="nova-senha" className="text-sm font-semibold">
             Senha (mínimo 6 caracteres)
           </label>
           <input
@@ -52,18 +67,18 @@ export function GestaoUsuarios() {
             autoComplete="new-password"
             value={form.senha}
             onChange={(e) => setForm({ ...form, senha: e.target.value })}
-            className="min-h-11 rounded-xl border-2 border-borda-campo bg-fundo px-3"
+            className="campo-caixa min-h-11 rounded-xl border-2 border-linha bg-fundo px-3 hover:border-borda-campo focus-visible:outline-none"
           />
         </div>
         <div className="flex flex-col gap-1">
-          <label htmlFor="papel" className="font-medium">
+          <label htmlFor="papel" className="text-sm font-semibold">
             Perfil
           </label>
           <select
             id="papel"
             value={form.papel}
             onChange={(e) => setForm({ ...form, papel: e.target.value as PapelUsuario })}
-            className="min-h-11 rounded-xl border-2 border-borda-campo bg-fundo px-3"
+            className="campo-caixa min-h-11 rounded-xl border-2 border-linha bg-fundo px-3 hover:border-borda-campo focus-visible:outline-none"
           >
             <option value="gerente">Gerente</option>
             <option value="admin">Administrador</option>
@@ -80,8 +95,8 @@ export function GestaoUsuarios() {
         </Botao>
       </form>
 
-      <section aria-label="Usuários cadastrados">
-        <h2 className="text-xl font-semibold">Usuários cadastrados</h2>
+      <section aria-label="Usuários cadastrados" className="cartao p-5">
+        <h2 className="text-lg font-bold tracking-tight">Usuários cadastrados</h2>
         <ul className="mt-3 flex flex-col">
           {lista.map((u) => (
             <li key={u.id} className="flex justify-between border-b border-linha py-3">

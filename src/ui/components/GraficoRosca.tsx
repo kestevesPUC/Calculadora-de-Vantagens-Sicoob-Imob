@@ -18,10 +18,23 @@ export function GraficoRosca({ titulo, itens }: { titulo: string; itens: ItemGra
 
   return (
     <figure aria-label={titulo} className="flex flex-col gap-3">
-      <figcaption className="text-xl font-semibold">{titulo}</figcaption>
+      <figcaption className="text-lg font-bold tracking-tight">{titulo}</figcaption>
       <div className="flex flex-wrap items-center gap-6">
-        <svg viewBox="0 0 160 160" width="160" height="160" role="img" aria-label={`Gráfico de rosca: ${titulo}`}>
-          <circle cx="80" cy="80" r={RAIO} fill="none" stroke="var(--color-suave)" strokeWidth="24" />
+        <svg
+          viewBox="0 0 160 160"
+          width="160"
+          height="160"
+          role="img"
+          aria-label={`Gráfico de rosca: ${titulo}`}
+        >
+          <circle
+            cx="80"
+            cy="80"
+            r={RAIO}
+            fill="none"
+            stroke="var(--color-suave)"
+            strokeWidth="24"
+          />
           {fatias.map((f) => (
             <circle
               key={f.rotulo}
@@ -46,7 +59,8 @@ export function GraficoRosca({ titulo, itens }: { titulo: string; itens: ItemGra
                 style={{ background: f.cor }}
               />
               <span>
-                {f.rotulo}: <strong>{formatarPercentual(f.fracao, 1)}</strong> ({formatarMoeda(f.valor)})
+                {f.rotulo}: <strong>{formatarPercentual(f.fracao, 1)}</strong> (
+                {formatarMoeda(f.valor)})
               </span>
             </li>
           ))}

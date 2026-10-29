@@ -9,8 +9,8 @@ interface Props {
 
 export function BlocoRecolhivel({ titulo, children, abertoInicial = false }: Props) {
   return (
-    <details open={abertoInicial} className="group rounded-2xl border-2 border-linha p-4">
-      <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between text-xl font-semibold">
+    <details open={abertoInicial} className="group cartao p-5">
+      <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between text-lg font-bold tracking-tight">
         {titulo}
         <ChevronDown aria-hidden="true" className="transition-transform group-open:rotate-180" />
       </summary>

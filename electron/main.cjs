@@ -67,6 +67,7 @@ function criarJanela() {
     width: 1280,
     height: 860,
     minWidth: 360,
+    icon: path.join(__dirname, 'icone.png'),
     title: 'Calculadora de Vantagens — Sicoob Imob.vc',
     webPreferences: {
       preload: path.join(__dirname, 'preload.cjs'),

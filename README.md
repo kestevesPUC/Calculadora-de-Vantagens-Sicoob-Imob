@@ -80,7 +80,7 @@ Isso confere o token, roda lint e testes, sobe a versão, gera o instalador e pu
 
 ## Logo
 
-Coloque o logo oficial em `public/brand/logo-sicoob-imobvc.svg`. Sem o arquivo, o app mostra um espaço reservado com o texto "Sicoob Imob.vc". Não desenhe nem imite o logo. Largura mínima de 64 px e área de arejamento de 2X, conforme [docs/09-identidade-visual.md](docs/09-identidade-visual.md).
+Coloque o logo oficial em `public/brand/logo-sicoob-imobvc.png`. O logo fornecido tem o texto "Sicoob" em branco, então é usado sobre o verde-escuro (login, barra lateral e PDF). Sem o arquivo, o app mostra um espaço reservado com o texto "Sicoob Imob.vc". Não desenhe nem imite o logo. Largura mínima de 64 px e área de arejamento de 2X, conforme [docs/09-identidade-visual.md](docs/09-identidade-visual.md).
 
 ## Premissas a validar antes do uso com clientes
 

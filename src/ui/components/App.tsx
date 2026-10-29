@@ -28,7 +28,8 @@ export function App() {
       .catch((erro) => {
         // Sem log de dados digitados; só o motivo da falha de carga (observabilidade).
         console.error('Falha ao carregar parâmetros', erro)
-        const detalhes = erro instanceof ParametrosInvalidosError ? erro.detalhes : ['Erro inesperado']
+        const detalhes =
+          erro instanceof ParametrosInvalidosError ? erro.detalhes : ['Erro inesperado']
         setEstado({ tipo: 'erro', detalhes })
       })
     void window.sicoob?.usuarioAtual().then(setUsuario)
@@ -55,7 +56,9 @@ export function App() {
   }
   if (!usuario) return <TelaLogin onEntrar={setUsuario} />
 
-  return <Sistema parametros={estado.parametros} usuario={usuario} onSair={() => setUsuario(null)} />
+  return (
+    <Sistema parametros={estado.parametros} usuario={usuario} onSair={() => setUsuario(null)} />
+  )
 }
 
 type Aba = 'simulacao' | 'dashboard' | 'usuarios'
@@ -79,45 +82,79 @@ function Sistema({
   }
 
   const abas: { id: Aba; rotulo: string; icone: React.ReactNode; visivel: boolean }[] = [
-    { id: 'simulacao', rotulo: 'Simulação', icone: <Calculator size={18} aria-hidden="true" />, visivel: true },
-    { id: 'dashboard', rotulo: 'Dashboard', icone: <LayoutDashboard size={18} aria-hidden="true" />, visivel: true },
-    { id: 'usuarios', rotulo: 'Usuários', icone: <Users size={18} aria-hidden="true" />, visivel: usuario.papel === 'admin' },
+    {
+      id: 'simulacao',
+      rotulo: 'Simulação',
+      icone: <Calculator size={18} aria-hidden="true" />,
+      visivel: true,
+    },
+    {
+      id: 'dashboard',
+      rotulo: 'Dashboard',
+      icone: <LayoutDashboard size={18} aria-hidden="true" />,
+      visivel: true,
+    },
+    {
+      id: 'usuarios',
+      rotulo: 'Usuários',
+      icone: <Users size={18} aria-hidden="true" />,
+      visivel: usuario.papel === 'admin',
+    },
   ]
 
   const nome = s.calculo?.entrada.nomeAdministradora || 'simulacao'
 
+  const titulos: Record<Aba, [string, string]> = {
+    simulacao: ['Simulação', 'Mostre à administradora quanto ela ganha sendo cooperada'],
+    dashboard: ['Dashboard', 'Indicadores e gráficos da simulação atual'],
+    usuarios: ['Usuários', 'Acesso ao sistema'],
+  }
+
   return (
     <>
-      <div className="min-h-screen print:hidden">
-        <header className="flex flex-wrap items-center justify-between gap-2 border-b-4 border-acento">
-          <Logo />
-          <div className="flex flex-wrap items-center gap-2 px-4">
-            <span>
-              Olá, <strong>{usuario.nome}</strong>
-            </span>
-            <Botao onClick={sair} icone={<LogOut size={18} aria-hidden="true" />}>
-              Sair
-            </Botao>
+      <div className="shell print:hidden">
+        <aside className="lateral">
+          <div className="marca">
+            <Logo />
+            <small>Calculadora de Vantagens</small>
           </div>
-        </header>
+          <nav aria-label="Seções">
+            {abas
+              .filter((a) => a.visivel)
+              .map((a) => (
+                <button
+                  key={a.id}
+                  type="button"
+                  aria-current={aba === a.id ? 'page' : undefined}
+                  onClick={() => setAba(a.id)}
+                >
+                  {a.icone}
+                  <span>{a.rotulo}</span>
+                </button>
+              ))}
+          </nav>
+          <div className="rodape-lateral">
+            <div className="quem">
+              <span className="avatar" aria-hidden="true">
+                {usuario.nome.slice(0, 1).toUpperCase()}
+              </span>
+              <span>
+                {usuario.nome} · {usuario.papel === 'admin' ? 'Administrador' : 'Gerente'}
+              </span>
+            </div>
+            <button type="button" onClick={sair}>
+              <LogOut size={18} aria-hidden="true" />
+              <span>Sair</span>
+            </button>
+          </div>
+        </aside>
 
-        <nav aria-label="Seções" className="flex flex-wrap gap-2 px-4 pt-4">
-          {abas
-            .filter((a) => a.visivel)
-            .map((a) => (
-              <Botao
-                key={a.id}
-                variante={aba === a.id ? 'primario' : 'secundario'}
-                aria-current={aba === a.id ? 'page' : undefined}
-                icone={a.icone}
-                onClick={() => setAba(a.id)}
-              >
-                {a.rotulo}
-              </Botao>
-            ))}
-        </nav>
+        <main className="conteudo">
+          <div className="mb-5">
+            <h1 className="text-2xl font-bold tracking-tight">{titulos[aba][0]}</h1>
+            <p className="opacity-70">{titulos[aba][1]}</p>
+          </div>
 
-        <main className="p-4">
           {aba === 'usuarios' && usuario.papel === 'admin' ? <GestaoUsuarios /> : null}
 
           {aba === 'dashboard' ? (
@@ -137,12 +174,20 @@ function Sistema({
                 <Botao
                   disabled={!s.calculo}
                   icone={<FileDown size={18} aria-hidden="true" />}
-                  onClick={() => void window.sicoob?.exportarPdf(`${nome}-${new Date().toISOString().slice(0, 10)}`)}
+                  onClick={() =>
+                    void window.sicoob?.exportarPdf(
+                      `${nome}-${new Date().toISOString().slice(0, 10)}`,
+                    )
+                  }
                 >
                   Exportar PDF
                 </Botao>
               </div>
-              <div className={apresentacao ? '' : 'grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)]'}>
+              <div
+                className={
+                  apresentacao ? '' : 'grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)]'
+                }
+              >
                 {apresentacao ? null : <FormularioEntrada s={s} />}
                 <PainelVantagens
                   parametros={parametros}

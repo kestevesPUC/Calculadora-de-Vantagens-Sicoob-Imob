@@ -26,7 +26,7 @@ export function Dashboard({ parametros: p, fatores, calculo }: Props) {
   if (!calculo) {
     return (
       <div className="flex flex-col gap-4">
-        <div role="status" className="rounded-2xl border-2 border-dashed border-linha p-8 text-center opacity-70">
+        <div role="status" className="cartao border-dashed p-10 text-center text-base">
           Preencha os dados da administradora na aba Simulação para ver os indicadores e gráficos.
         </div>
         <Aviso texto={p.textoAviso} vigencia={p.vigencia} />
@@ -87,20 +87,28 @@ export function Dashboard({ parametros: p, fatores, calculo }: Props) {
       </section>
 
       <section className="grid gap-6 lg:grid-cols-2">
-        <div className="rounded-2xl border-2 border-linha p-4">
+        <div className="cartao p-5">
           <GraficoRosca titulo="De onde vem o total anual" itens={composicao} />
         </div>
-        <div className="rounded-2xl border-2 border-linha p-4">
+        <div className="cartao p-5">
           <GraficoBarras titulo="Valores por fonte (por ano)" itens={composicao} />
         </div>
         {c ? (
-          <div className="rounded-2xl border-2 border-linha p-4 lg:col-span-2">
+          <div className="cartao p-5 lg:col-span-2">
             <GraficoBarras
               titulo="Comparação com o banco atual (por ano)"
               itens={[
-                { rotulo: 'Total anual recorrente', valor: r.totalAnualRecorrente, cor: COR.cobranca },
+                {
+                  rotulo: 'Total anual recorrente',
+                  valor: r.totalAnualRecorrente,
+                  cor: COR.cobranca,
+                },
                 { rotulo: 'Economia em boletos', valor: c.economiaBoletos, cor: COR.dav },
-                { rotulo: 'Economia em manutenção', valor: c.economiaManutencao, cor: COR.investimentos },
+                {
+                  rotulo: 'Economia em manutenção',
+                  valor: c.economiaManutencao,
+                  cor: COR.investimentos,
+                },
                 { rotulo: 'Ganho total', valor: c.ganhoTotalAnualVsBancoAtual, cor: COR.capital },
               ]}
             />

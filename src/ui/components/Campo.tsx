@@ -32,13 +32,13 @@ export function Campo({
 
   return (
     <div className="flex flex-col gap-1">
-      <label htmlFor={id} className="font-medium">
+      <label htmlFor={id} className="text-sm font-semibold">
         {rotulo}
         {obrigatorio ? <span aria-hidden="true"> *</span> : null}
       </label>
       <div
-        className={`flex min-h-11 items-center gap-2 rounded-xl bg-fundo px-3 ${
-          erro ? 'border-2 border-erro' : 'border-2 border-borda-campo'
+        className={`campo-caixa flex min-h-11 items-center gap-2 rounded-xl bg-fundo px-3 ${
+          erro ? 'border-2 border-erro' : 'border-2 border-linha hover:border-borda-campo'
         }`}
       >
         {prefixo ? <span aria-hidden="true">{prefixo}</span> : null}
@@ -50,7 +50,9 @@ export function Campo({
           inputMode={tipo === 'numero' ? 'decimal' : 'text'}
           autoComplete="off"
           aria-invalid={erro ? true : undefined}
-          aria-describedby={[erro ? idErro : '', dica ? idDica : ''].filter(Boolean).join(' ') || undefined}
+          aria-describedby={
+            [erro ? idErro : '', dica ? idDica : ''].filter(Boolean).join(' ') || undefined
+          }
           aria-required={obrigatorio}
           className="min-h-10 w-full bg-transparent outline-none focus-visible:outline-none"
         />
@@ -62,7 +64,11 @@ export function Campo({
         </p>
       ) : null}
       {erro ? (
-        <p id={idErro} role="alert" className="flex items-center gap-1 text-sm font-medium text-erro">
+        <p
+          id={idErro}
+          role="alert"
+          className="flex items-center gap-1 text-sm font-medium text-erro"
+        >
           <CircleAlert size={16} aria-hidden="true" />
           {erro}
         </p>
