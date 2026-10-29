@@ -1,0 +1,24 @@
+{
+  "vigencia": "2026-01-01",
+  "resultadoProjetado": "15500000.00",
+  "percentualDistribuicao": "0.12",
+  "pesosRateio": {
+    "depositoVista": "0.40",
+    "investimentos": "0.25",
+    "cobranca": "0.20",
+    "credito": "0.15"
+  },
+  "basesCooperativa": {
+    "depositoVista": "102559246.79",
+    "investimentos": "359016883.85",
+    "receitaCobranca": "4339523.32"
+  },
+  "fatorSaldoDepositoVista": "0.0913",
+  "fatorSaldoInvestimentos": "0.0960",
+  "custoBoleto": "1.70",
+  "tarifaManutencaoMensal": "50.00",
+  "premioPorCondominio": "50.00",
+  "percentualSelicContaCapital": "1.00",
+  "selicPadrao": "0.15",
+  "textoAviso": "Valores estimados para fins de simulação comercial. A distribuição de sobras depende do resultado apurado e da aprovação em assembleia, conforme as regras vigentes da cooperativa. Não há garantia de rentabilidade."
+}

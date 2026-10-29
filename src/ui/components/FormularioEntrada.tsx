@@ -1,0 +1,62 @@
+import { Eraser } from 'lucide-react'
+import type { Simulacao } from '../hooks/useSimulacao'
+import { BlocoRecolhivel } from './BlocoRecolhivel'
+import { Botao } from './Botao'
+import { Campo } from './Campo'
+
+export function FormularioEntrada({ s }: { s: Simulacao }) {
+  const campo = (nome: Parameters<Simulacao['tocar']>[0]) => ({
+    valor: s.campos[nome],
+    onChange: (v: string) => s.alterar(nome, v),
+    onBlur: () => s.tocar(nome),
+    erro: s.erros[nome],
+  })
+
+  return (
+    <form
+      className="flex flex-col gap-4"
+      aria-label="Dados da administradora"
+      onSubmit={(e) => e.preventDefault()}
+    >
+      <h2 className="text-xl font-semibold">Dados da administradora</h2>
+      <Campo
+        rotulo="Nome da administradora"
+        tipo="texto"
+        valor={s.campos.nomeAdministradora}
+        onChange={(v) => s.alterar('nomeAdministradora', v)}
+        onBlur={() => undefined}
+      />
+      <Campo rotulo="Número de condomínios" obrigatorio {...campo('condominios')} />
+      <Campo
+        rotulo="Boletos por mês"
+        obrigatorio
+        dica="Boletos gerados no mês"
+        {...campo('boletosMes')}
+      />
+      <Campo
+        rotulo="Faturamento médio mensal"
+        obrigatorio
+        prefixo="R$"
+        {...campo('faturamentoMensal')}
+      />
+      <Campo
+        rotulo="Capital social integralizado"
+        obrigatorio
+        prefixo="R$"
+        {...campo('capitalSocial')}
+      />
+      <Campo rotulo="Taxa Selic anual" obrigatorio sufixo="%" {...campo('selic')} />
+      <BlocoRecolhivel titulo="Comparar com o banco atual">
+        <Campo rotulo="Tarifa atual por boleto" prefixo="R$" {...campo('tarifaBoletoAtual')} />
+        <Campo
+          rotulo="Tarifa atual de manutenção por conta/mês"
+          prefixo="R$"
+          {...campo('tarifaManutencaoAtual')}
+        />
+      </BlocoRecolhivel>
+      <Botao icone={<Eraser size={18} aria-hidden="true" />} onClick={s.limpar}>
+        Limpar
+      </Botao>
+    </form>
+  )
+}

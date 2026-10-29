@@ -1,0 +1,24 @@
+:root {
+  /* Paleta da marca (Guia da Marca v3.0) */
+  --sicoob-turquesa: #00AE9D;
+  --sicoob-verde-escuro: #003641;
+  --sicoob-branco: #FFFFFF;
+  --sicoob-verde-claro: #C9D200;
+  --sicoob-verde-medio: #7DB61C;
+  --sicoob-roxo: #49479D;
+
+  /* Tokens semânticos */
+  --cor-fundo: var(--sicoob-branco);
+  --cor-texto: var(--sicoob-verde-escuro);
+  --cor-texto-invertido: var(--sicoob-branco);
+  --cor-superficie-destaque: var(--sicoob-verde-escuro);   /* destaque principal do painel */
+  --cor-texto-sobre-destaque: var(--sicoob-branco);
+  --cor-valor-sobre-destaque: var(--sicoob-verde-claro);   /* número grande do total anual */
+  --cor-acento: var(--sicoob-turquesa);                    /* faixas, ícones, bordas decorativas */
+  --cor-botao-primario: var(--sicoob-turquesa);
+  --cor-texto-botao-primario: var(--sicoob-verde-escuro);
+  --cor-borda-campo: var(--sicoob-verde-escuro);
+  --cor-foco: var(--sicoob-roxo);
+  --cor-erro: var(--sicoob-roxo);                          /* vermelho é proibido pelo guia */
+  --cor-positivo: var(--sicoob-verde-medio);               /* só como ícone/fundo, nunca texto sobre branco */
+}

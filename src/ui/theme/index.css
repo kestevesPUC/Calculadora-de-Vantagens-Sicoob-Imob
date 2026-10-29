@@ -1,0 +1,73 @@
+@import 'tailwindcss';
+@import './tokens.css';
+
+@font-face {
+  font-family: 'Asap';
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/asap-latin-400-normal.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Asap';
+  font-weight: 500;
+  font-display: swap;
+  src: url('/fonts/asap-latin-500-normal.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Asap';
+  font-weight: 600;
+  font-display: swap;
+  src: url('/fonts/asap-latin-600-normal.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Asap';
+  font-weight: 700;
+  font-display: swap;
+  src: url('/fonts/asap-latin-700-normal.woff2') format('woff2');
+}
+
+@theme inline {
+  --color-fundo: var(--cor-fundo);
+  --color-texto: var(--cor-texto);
+  --color-invertido: var(--cor-texto-invertido);
+  --color-destaque: var(--cor-superficie-destaque);
+  --color-sobre-destaque: var(--cor-texto-sobre-destaque);
+  --color-valor-destaque: var(--cor-valor-sobre-destaque);
+  --color-acento: var(--cor-acento);
+  --color-botao: var(--cor-botao-primario);
+  --color-texto-botao: var(--cor-texto-botao-primario);
+  --color-borda-campo: var(--cor-borda-campo);
+  --color-foco: var(--cor-foco);
+  --color-erro: var(--cor-erro);
+  --color-positivo: var(--cor-positivo);
+  /* Neutros derivados do verde-escuro, como manda docs/09 */
+  --color-suave: rgb(0 54 65 / 0.08);
+  --color-linha: rgb(0 54 65 / 0.2);
+  --font-sans: 'Asap', Arial, sans-serif;
+  --font-titulo: 'Asap', Tahoma, sans-serif;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  background: var(--cor-fundo);
+  color: var(--cor-texto);
+  font-family: 'Asap', Arial, sans-serif;
+  font-size: 16px;
+  font-variant-numeric: tabular-nums;
+}
+
+:focus-visible {
+  outline: 2px solid var(--cor-foco);
+  outline-offset: 2px;
+}
+
+@media print {
+  .nao-imprimir {
+    display: none !important;
+  }
+}

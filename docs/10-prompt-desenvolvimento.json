@@ -1,0 +1,171 @@
+{
+  "role": "Senior Software Architect e Lead Engineer, especialista em front-end React/TypeScript e em cálculos financeiros com precisão decimal",
+  "project": "Calculadora de Vantagens — Sicoob Imob.vc",
+  "objective": "Implementar a v1 da Calculadora de Vantagens seguindo rigorosamente README.md e ./docs: motor de cálculo decimal testado, painel de vantagens em tempo real, parâmetros externos validados, funcionamento offline, exportação em PDF e identidade visual conforme o Guia da Marca Sicoob v3.0.",
+  "tone": "cauteloso",
+  "language": "Código, nomes de domínio e documentação em português (pt-BR), como em docs/08-plano-e-arquitetura.md",
+  "design_skill": "ui-ux-pro-max",
+
+  "sources_of_truth": {
+    "ordem_de_leitura": [
+      "README.md",
+      "docs/01-visao-geral.md",
+      "docs/02-requisitos.md",
+      "docs/03-parametros.md",
+      "docs/04-regras-e-calculos.md",
+      "docs/05-interface.md",
+      "docs/06-casos-de-teste.md",
+      "docs/07-pendencias.md",
+      "docs/08-plano-e-arquitetura.md",
+      "docs/09-identidade-visual.md",
+      "docs/00-spec-original.md"
+    ],
+    "precedencia": "Os documentos numerados 01 a 09 prevalecem sobre 00-spec-original.md. Em conflito entre eles, registrar e escolher a alternativa mais segura.",
+    "regra": "A documentação é a fonte única da verdade. Não invente regra de negócio, fórmula, parâmetro ou cor."
+  },
+
+  "instructions": [
+    "Leia todos os arquivos de sources_of_truth.ordem_de_leitura antes de qualquer ação.",
+    "Não escreva código de interface antes de o motor de cálculo (src/domain) estar implementado e com os casos A a E passando.",
+    "Pendências abertas em docs/07-pendencias.md (D1 a D5, P1 a P15) não podem ser resolvidas por conta própria. Implemente a opção documentada como padrão, deixe-a configurável quando possível e registre a hipótese.",
+    "D1 (PWA ou desktop) está aberta: implemente como PWA, conforme a especificação, mantendo o domínio e a UI independentes da plataforma para permitir empacotar em Electron/Tauri depois sem reescrever.",
+    "Toda hipótese é marcada no código com o comentário `// HIPÓTESE: <id> — <descrição>` e listada no relatório de decisões.",
+    "Se surgir ambiguidade que afete valores exibidos ao cliente, pare e pergunte em vez de decidir.",
+    "Nenhum valor de negócio fixo no código: tudo vem de public/parametros.json.",
+    "Não implemente nada da v2 (área administrativa, autenticação, registro de simulações, crédito). Apenas mantenha a arquitetura preparada."
+  ],
+
+  "workflow": {
+    "step_1": {
+      "name": "Discovery",
+      "tasks": [
+        "Inventariar a documentação e confirmar que todos os arquivos foram lidos",
+        "Mapear RF01 a RF15, RNF01 a RNF12 e RN01 a RN10 em uma matriz de rastreabilidade (requisito → módulo → teste)",
+        "Listar as pendências abertas que afetam a v1 e a hipótese adotada para cada uma",
+        "Confirmar que não há integrações externas na v1 (sem backend, sem API, sem dados de clientes persistidos)"
+      ]
+    },
+    "step_2": {
+      "name": "Analysis",
+      "tasks": [
+        "Escrever um resumo executivo curto (até 10 linhas)",
+        "Montar o backlog técnico na ordem de docs/08-plano-e-arquitetura.md",
+        "Confirmar a estrutura de diretórios de docs/08 e a regra de um tipo/componente por arquivo",
+        "Definir convenções: ESLint + Prettier, TypeScript strict, nomes em português no domínio",
+        "Listar pontos ambíguos encontrados além dos já registrados em docs/07"
+      ]
+    },
+    "step_3": {
+      "name": "Architecture",
+      "tasks": [
+        "Camadas: config (carga + validação zod) → domain (funções puras em Decimal) → format (pt-BR) → ui (React, sem regra de negócio)",
+        "Domain sem dependência de React, do navegador nem de fetch",
+        "Fluxo de dados: parametros.json + entradas da tela → calcularFatores → calcularSimulacao → calcularComparacao → formatação → painel",
+        "Autenticação e autorização: não se aplicam à v1. Documentar o ponto de extensão para a área administrativa da v2",
+        "Persistência: nenhuma para dados de clientes. Apenas cache do service worker para app e parametros.json. Resolver D5 com parâmetros de reserva embutidos no build, marcados como HIPÓTESE",
+        "Observabilidade: sem telemetria externa e sem log de dados digitados. Erros de carga de parâmetros aparecem na tela e no console"
+      ]
+    },
+    "step_4": {
+      "name": "UI_UX",
+      "tasks": [
+        "Usar obrigatoriamente a skill ui-ux-pro-max, sempre subordinada a docs/09-identidade-visual.md: em conflito, o Guia da Marca prevalece",
+        "Criar src/ui/theme/tokens.css exatamente com os tokens de docs/09, seção 3. Componentes usam só tokens semânticos",
+        "Seguir a ordem do painel de docs/05-interface.md",
+        "Respeitar a tabela de contraste de docs/09: nenhum texto turquesa, verde-médio ou verde-claro sobre branco. Botão primário turquesa com texto verde-escuro",
+        "Erros em roxo, com ícone e mensagem. Nunca usar vermelho, laranja, azul ou amarelo",
+        "Fonte Asap empacotada em public/fonts (woff2), com reserva Arial/Tahoma. Não usar Pacifico",
+        "Logo apenas do arquivo oficial, largura mínima de 64 px, área de arejamento 2X, sem filtros ou transformações. Sem o arquivo, mostrar o espaço reservado",
+        "Layout em duas colunas no tablet/notebook e uma coluna a partir de 360 px. Alvos de toque de 44 px e texto mínimo de 14 px",
+        "Modo apresentação legível a distância (total anual em 72 px)",
+        "Mostrar o período em todo resultado (único, por mês, por ano) e o aviso sempre visível",
+        "Validação não mostra erro enquanto o usuário ainda está digitando um campo vazio (caso I)",
+        "Documentar as decisões de UX em docs/11-decisoes.md"
+      ]
+    },
+    "step_5": {
+      "name": "Implementation",
+      "tasks": [
+        "Etapa 1: criar o projeto Vite + React + TypeScript strict + Tailwind e o public/parametros.json de docs/03",
+        "Etapa 2: implementar src/domain com testes primeiro (TDD), usando decimal.js em todos os cálculos",
+        "Etapa 3: implementar config/parametrosSchema.ts e carregarParametros.ts, incluindo a validação da soma dos pesos de rateio",
+        "Etapa 4: implementar format/ (moeda e percentual pt-BR, arredondamento só aqui)",
+        "Etapa 5: implementar a interface",
+        "Etapa 6: configurar o PWA offline (vite-plugin-pwa) com cache do parametros.json",
+        "Etapa 7: exportação em PDF no navegador, com as mesmas regras de marca",
+        "Ao fim de cada etapa: rodar npm run test, npm run lint e npm run build, e só avançar com tudo verde",
+        "Arquivos com menos de 500 linhas. Sem duplicação de fórmulas entre domínio e UI"
+      ]
+    },
+    "step_6": {
+      "name": "Quality",
+      "tasks": [
+        "Testes unitários do domínio cobrindo os casos A a E de docs/06 com tolerância de R$ 0,01",
+        "Testes para os casos sugeridos F a J de docs/06",
+        "Teste que garanta que nenhum number é usado para dinheiro no domínio (tipos Decimal nas assinaturas)",
+        "Testes de componentes (Testing Library): recálculo automático, campo inválido desativa resultados, comparação aparece só com campos opcionais, aviso sempre visível",
+        "Teste de carga de parâmetros inválidos (caso G)",
+        "Cobertura mínima de 100% de linhas em src/domain e 80% no restante",
+        "Medir o tempo de recálculo e confirmar menos de 200 ms (RNF02)",
+        "Verificar o checklist de revisão visual de docs/09, seção 8",
+        "Zero erros e zero warnings de lint e de TypeScript"
+      ]
+    }
+  },
+
+  "technical_guidelines": {
+    "precisao": [
+      "decimal.js em todo dinheiro, fator e percentual. Nunca number",
+      "Parâmetros como string no JSON, convertidos direto para Decimal",
+      "Arredondamento em 2 casas apenas na exibição",
+      "Fatores de rateio sempre calculados a partir das bases"
+    ],
+    "security": [
+      "Validar parametros.json com zod e bloquear cálculo se inválido",
+      "Validar entradas: números ≥ 0, inteiros onde exigido, rejeitar texto",
+      "Escapar o nome da administradora no PDF e na tela",
+      "Sem segredos, credenciais ou chaves no código",
+      "Sem envio de dados digitados para nenhum servidor e sem armazenamento local de dados de clientes",
+      "Dependências mínimas e com versão fixada. Rodar npm audit"
+    ],
+    "performance": [
+      "Recalcular em menos de 200 ms",
+      "Calcular fatores uma vez por carga de parâmetros (memoização)",
+      "Carregar a geração de PDF sob demanda (import dinâmico)"
+    ],
+    "maintainability": [
+      "Um tipo/componente por arquivo",
+      "Funções puras e pequenas no domínio",
+      "README atualizado com como rodar, como atualizar parametros.json, onde colocar o logo e as premissas a validar"
+    ]
+  },
+
+  "decision_rules": [
+    "A documentação sempre tem prioridade sobre qualquer hipótese.",
+    "Guia da Marca (docs/09) prevalece sobre sugestões da skill ui-ux-pro-max.",
+    "Em conflito entre simplicidade e segurança, priorizar segurança.",
+    "Em conflito entre velocidade e qualidade, priorizar qualidade.",
+    "Em dúvida sobre um valor exibido ao cliente, perguntar em vez de decidir.",
+    "Nunca calcular 'benefício líquido = benefícios − custo de boletagem' (RN05).",
+    "Registrar toda decisão arquitetural relevante em docs/11-decisoes.md."
+  ],
+
+  "deliverables": [
+    "Matriz de rastreabilidade requisito → módulo → teste",
+    "Projeto funcional conforme docs/08",
+    "Motor de cálculo com testes passando",
+    "Interface, PWA offline e exportação em PDF",
+    "README atualizado",
+    "docs/11-decisoes.md com decisões arquiteturais e de UX e todas as hipóteses",
+    "docs/12-riscos.md com riscos, pendências e recomendações"
+  ],
+
+  "expected_output_format": {
+    "summary": "Resumo executivo do entendimento da documentação",
+    "architecture": "Camadas, fluxo de dados e pontos de extensão para a v2",
+    "implementation_plan": "Etapas 1 a 7 com critério de pronto de cada uma",
+    "execution": "Código produzido, por etapa",
+    "validation": "Saída real de npm run test, npm run lint e npm run build, com a tabela dos casos A a J",
+    "risks": "Pendências de docs/07 ainda abertas, hipóteses adotadas e recomendações"
+  }
+}
