@@ -9,7 +9,6 @@ Mesmo fluxo do projeto CCP (JRP Engenharia): publicação a partir do computador
 | Arquivo | Uso |
 | --- | --- |
 | `Calculadora-Sicoob-Setup-<versão>.exe` | instalador (por usuário, sem administrador; atalhos; permite escolher a pasta) |
-| `Calculadora-Sicoob-Portatil-<versão>.exe` | versão portátil (não atualiza sozinha) |
 | `latest.yml` e `*.blockmap` | metadados de atualização |
 
 ## Onde ficam os dados

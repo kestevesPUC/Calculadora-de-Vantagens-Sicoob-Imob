@@ -19,7 +19,7 @@ module.exports = {
   files: ['dist/**/*', 'electron/**/*.cjs', 'package.json'],
   directories: { output: 'release' },
   ...(publish && { publish }),
-  win: { target: ['nsis', 'portable'] },
+  win: { target: ['nsis'] },
   nsis: {
     // Instalação por usuário (sem administrador). Desinstalar NÃO apaga os dados
     // (ficam em Documentos\Calculadora Sicoob Imob.vc).
@@ -33,5 +33,4 @@ module.exports = {
     artifactName: 'Calculadora-Sicoob-Setup-${version}.${ext}',
     language: '1046', // português (Brasil)
   },
-  portable: { artifactName: 'Calculadora-Sicoob-Portatil-${version}.${ext}' },
 }
