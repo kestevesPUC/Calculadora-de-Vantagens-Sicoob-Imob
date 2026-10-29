@@ -10,7 +10,6 @@ import { GestaoUsuarios } from './GestaoUsuarios'
 import { Logo } from './Logo'
 import { PainelVantagens } from './PainelVantagens'
 import { RelatorioImpressao } from './RelatorioImpressao'
-import { CreditoAutor } from './CreditoAutor'
 import { TelaLogin } from './TelaLogin'
 import { TelaTrocaSenha } from './TelaTrocaSenha'
 import { VersaoApp } from './VersaoApp'
@@ -153,7 +152,6 @@ function Sistema({
             </button>
             <div className="creditos">
               <VersaoApp />
-              <CreditoAutor />
             </div>
           </div>
         </aside>

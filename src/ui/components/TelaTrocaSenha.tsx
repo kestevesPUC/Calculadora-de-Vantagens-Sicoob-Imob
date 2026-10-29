@@ -2,7 +2,6 @@ import { useState, type FormEvent } from 'react'
 import { CircleAlert, KeyRound } from 'lucide-react'
 import type { Usuario } from '../../domain/Usuario'
 import { Botao } from './Botao'
-import { CreditoAutor } from './CreditoAutor'
 import { Logo } from './Logo'
 
 interface Props {
@@ -76,7 +75,6 @@ export function TelaTrocaSenha({ onTrocada }: Props) {
         <Logo />
         <h1>Calculadora de Vantagens</h1>
         <p>Por segurança, defina uma senha pessoal antes de continuar.</p>
-        <CreditoAutor className="mt-auto opacity-80" />
       </section>
       <section className="painel">
         <div className="w-full max-w-sm">
