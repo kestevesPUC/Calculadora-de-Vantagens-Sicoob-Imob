@@ -2,3 +2,8 @@ node_modules
 dist
 release
 coverage
+
+# Segredos e arquivos locais
+.env
+*.log
+Thumbs.db

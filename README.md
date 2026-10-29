@@ -12,6 +12,7 @@ Aplicativo **desktop (Electron + Node.js)** para o gerente de relacionamento mos
 | --- | --- |
 | [docs/00-spec-original.md](docs/00-spec-original.md) a [docs/09-identidade-visual.md](docs/09-identidade-visual.md) | Especificação, requisitos, parâmetros, regras, interface, testes, pendências, arquitetura e marca |
 | [docs/10-prompt-desenvolvimento.json](docs/10-prompt-desenvolvimento.json) | Prompt de desenvolvimento |
+| [docs/publicacao.md](docs/publicacao.md) | Instalador, versões e atualização automática |
 | [docs/11-decisoes.md](docs/11-decisoes.md) | Decisões, hipóteses e matriz de rastreabilidade |
 | [docs/12-riscos.md](docs/12-riscos.md) | Riscos, pendências abertas e recomendações |
 
@@ -69,22 +70,13 @@ Se o arquivo for inválido, o app mostra o erro e não calcula. Dicionário em [
 
 ## Publicar versões e atualização automática
 
-O app instalado busca novas versões nos **GitHub Releases** do repositório e oferece reiniciar para instalar.
-
-1. Altere `version` em `package.json`.
-2. Crie e envie a tag:
+Fluxo igual ao do projeto CCP, detalhado em [docs/publicacao.md](docs/publicacao.md). Com `GH_TOKEN` definido (modelo em `.env.example`):
 
 ```bash
-git tag v1.0.1
+npm run publicar
 ```
 
-```bash
-git push origin v1.0.1
-```
-
-O workflow `.github/workflows/release.yml` roda lint e testes, gera o instalador Windows e publica a release. Para publicar do seu computador, defina `GH_TOKEN` e rode `npm run release`. Instalador local sem publicar: `npm run dist`.
-
-O instalador não é assinado digitalmente: o Windows SmartScreen pode avisar na instalação. O repositório precisa ser público para o atualizador funcionar sem token.
+Isso confere o token, roda lint e testes, sobe a versão, gera o instalador e publica a release nos GitHub Releases. Os computadores instalados baixam a atualização sozinhos. Para só gerar o instalador: `npm run dist`. O repositório precisa ser público e o instalador não é assinado (o SmartScreen pode avisar).
 
 ## Logo
 

@@ -2,6 +2,9 @@
   "name": "calculadora-vantagens-sicoob-imobvc",
   "private": true,
   "version": "1.0.0",
+  "description": "Calculadora de Vantagens — Sicoob Imob.vc (desktop)",
+  "author": "Kaio Gomes",
+  "license": "MIT",
   "type": "module",
   "main": "electron/main.cjs",
   "scripts": {
@@ -13,29 +16,11 @@
     "test:cov": "vitest run --coverage",
     "lint": "eslint . --max-warnings 0",
     "format": "prettier --write .",
-    "dist": "npm run build && electron-builder --win --publish never",
-    "release": "npm run build && electron-builder --win --publish always"
-  },
-  "build": {
-    "appId": "br.com.sicoob.imobvc.calculadora",
-    "productName": "Calculadora Sicoob Imob.vc",
-    "files": [
-      "dist/**",
-      "electron/**/*.cjs"
-    ],
-    "win": {
-      "target": "nsis"
-    },
-    "publish": {
-      "provider": "github",
-      "owner": "kestevesPUC",
-      "repo": "Calculadora-de-Vantagens-Sicoob-Imob",
-      "releaseType": "release"
-    },
-    "nsis": {
-      "deleteAppDataOnUninstall": false,
-      "oneClick": false
-    }
+    "dist": "npm run build && electron-builder --config electron-builder.config.cjs --win --publish never",
+    "versao:patch": "npm version patch --no-git-tag-version",
+    "versao:minor": "npm version minor --no-git-tag-version",
+    "publicar": "node scripts/release.cjs patch",
+    "publicar:minor": "node scripts/release.cjs minor"
   },
   "dependencies": {
     "decimal.js": "10.6.0",

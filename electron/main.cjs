@@ -112,7 +112,10 @@ function buscarAtualizacao() {
     })
     if (response === 0) autoUpdater.quitAndInstall()
   })
-  autoUpdater.checkForUpdates().catch((e) => console.error(e.message))
+  const verificar = () => autoUpdater.checkForUpdates().catch((e) => console.error(e.message))
+  // Como no CCP: ~15 s depois de abrir e a cada 6 h. Escolhendo "Depois", instala ao fechar.
+  setTimeout(verificar, 15_000)
+  setInterval(verificar, 6 * 60 * 60 * 1000)
 }
 
 app.on('window-all-closed', () => {

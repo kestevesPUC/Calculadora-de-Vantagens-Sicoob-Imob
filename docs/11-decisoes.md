@@ -12,7 +12,7 @@
 | A6 | Senhas com hash scrypt e sal; sessão mantida só no processo principal; criar/listar usuários exige perfil admin no processo principal | Segurança não depende da interface |
 | A7 | `contextIsolation`, `sandbox` e CSP restritiva; a interface só acessa a ponte `window.sicoob` | Boas práticas Electron |
 | A8 | PDF por `printToPDF` de uma visão de impressão (`RelatorioImpressao`) com os mesmos tokens de marca | Sem dependência extra; mesma identidade visual |
-| A9 | Atualização automática por `electron-updater` + GitHub Releases | Pedido do responsável |
+| A9 | Atualização automática por `electron-updater` + GitHub Releases, publicada pelo comando `npm run publicar` como no projeto CCP | Pedido do responsável |
 | A10 | Gráficos em SVG/CSS próprios com a paleta da marca; todo valor também aparece em texto | Sem biblioteca extra; cor nunca é o único sinal |
 
 ## Decisões de UX
