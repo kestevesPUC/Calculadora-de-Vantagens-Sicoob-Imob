@@ -26,31 +26,51 @@ export function FormularioEntrada({ s }: { s: Simulacao }) {
         onChange={(v) => s.alterar('nomeAdministradora', v)}
         onBlur={() => undefined}
       />
-      <Campo rotulo="Número de condomínios" obrigatorio {...campo('condominios')} />
+      <Campo
+        rotulo="Número de condomínios"
+        obrigatorio
+        mascara="inteiro"
+        {...campo('condominios')}
+      />
       <Campo
         rotulo="Boletos por mês"
         obrigatorio
+        mascara="inteiro"
         dica="Boletos gerados no mês"
         {...campo('boletosMes')}
       />
       <Campo
         rotulo="Faturamento médio mensal"
         obrigatorio
+        mascara="decimal"
         prefixo="R$"
         {...campo('faturamentoMensal')}
       />
       <Campo
         rotulo="Capital social integralizado"
         obrigatorio
+        mascara="decimal"
         prefixo="R$"
         {...campo('capitalSocial')}
       />
-      <Campo rotulo="Taxa Selic anual" obrigatorio sufixo="%" {...campo('selic')} />
+      <Campo
+        rotulo="Taxa Selic anual"
+        obrigatorio
+        mascara="decimal"
+        sufixo="%"
+        {...campo('selic')}
+      />
       <BlocoRecolhivel titulo="Comparar com o banco atual">
-        <Campo rotulo="Tarifa atual por boleto" prefixo="R$" {...campo('tarifaBoletoAtual')} />
+        <Campo
+          rotulo="Tarifa atual por boleto"
+          prefixo="R$"
+          mascara="decimal"
+          {...campo('tarifaBoletoAtual')}
+        />
         <Campo
           rotulo="Tarifa atual de manutenção por conta/mês"
           prefixo="R$"
+          mascara="decimal"
           {...campo('tarifaManutencaoAtual')}
         />
       </BlocoRecolhivel>

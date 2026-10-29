@@ -1,5 +1,6 @@
 import { useId } from 'react'
 import { CircleAlert } from 'lucide-react'
+import { aplicarMascara, type Mascara } from '../../format/mascaras'
 
 interface Props {
   rotulo: string
@@ -12,6 +13,7 @@ interface Props {
   prefixo?: string
   sufixo?: string
   tipo?: 'texto' | 'numero'
+  mascara?: Mascara
 }
 
 export function Campo({
@@ -25,6 +27,7 @@ export function Campo({
   prefixo,
   sufixo,
   tipo = 'numero',
+  mascara,
 }: Props) {
   const id = useId()
   const idErro = `${id}-erro`
@@ -45,7 +48,7 @@ export function Campo({
         <input
           id={id}
           value={valor}
-          onChange={(e) => onChange(e.target.value)}
+          onChange={(e) => onChange(aplicarMascara(mascara, e.target.value))}
           onBlur={onBlur}
           inputMode={tipo === 'numero' ? 'decimal' : 'text'}
           autoComplete="off"

@@ -6,7 +6,13 @@ import type { Usuario } from '../../../domain/Usuario'
 import { App } from '../App'
 
 const parametros = readFileSync(join(__dirname, '../../../../public/parametros.json'), 'utf8')
-const admin: Usuario = { id: '1', usuario: 'admin', nome: 'Administrador', papel: 'admin', criadoEm: '' }
+const admin: Usuario = {
+  id: '1',
+  usuario: 'admin',
+  nome: 'Administrador',
+  papel: 'admin',
+  criadoEm: '',
+}
 const gerente: Usuario = { id: '2', usuario: 'ana', nome: 'Ana', papel: 'gerente', criadoEm: '' }
 
 function ponte(logado: Usuario | null, extra: Partial<NonNullable<typeof window.sicoob>> = {}) {
@@ -66,7 +72,9 @@ describe('simulação', () => {
     await waitFor(() => expect(screen.getByTestId('total-anual')).toHaveTextContent('R$ 6.890,86'))
     expect(screen.getByText(/Total no primeiro ano: R\$ 8\.890,86/)).toBeInTheDocument()
     expect(screen.queryByLabelText('Comparação com o banco atual')).not.toBeInTheDocument()
-    expect(screen.getByRole('contentinfo', { name: 'Aviso legal' })).toHaveTextContent(/01\/01\/2026/)
+    expect(screen.getByRole('contentinfo', { name: 'Aviso legal' })).toHaveTextContent(
+      /01\/01\/2026/,
+    )
   })
 
   it('caso I: não mostra erro enquanto digita, mostra ao sair do campo', async () => {
@@ -80,18 +88,24 @@ describe('simulação', () => {
     expect(await screen.findByText('Campo obrigatório')).toBeInTheDocument()
   })
 
-  it('caso E: valor negativo bloqueia resultados com mensagem', async () => {
+  it('caso E: a máscara descarta o sinal de menos e letras', async () => {
     ponte(admin)
     const user = userEvent.setup()
     render(<App />)
     await preencherCasoA(user)
     const campo = screen.getByLabelText(/Número de condomínios/)
     await user.clear(campo)
-    await user.type(campo, '-3')
-    await user.tab()
-    expect(await screen.findByText('Digite um número maior ou igual a zero')).toBeInTheDocument()
-    expect(screen.getByText('Corrija os campos para ver o resultado')).toBeInTheDocument()
-    expect(screen.queryByTestId('total-anual')).not.toBeInTheDocument()
+    await user.type(campo, '-3a')
+    expect(campo).toHaveValue('3')
+  })
+
+  it('máscara de dinheiro: milhar e vírgula enquanto digita', async () => {
+    ponte(admin)
+    const user = userEvent.setup()
+    render(<App />)
+    const campo = await screen.findByLabelText(/Faturamento médio mensal/)
+    await user.type(campo, '1234567,8')
+    expect(campo).toHaveValue('1.234.567,8')
   })
 
   it('caso C: comparação aparece só com campos opcionais', async () => {
@@ -102,7 +116,9 @@ describe('simulação', () => {
     await user.click(screen.getByText('Comparar com o banco atual'))
     await user.type(screen.getByLabelText(/Tarifa atual por boleto/), '2,50')
     await user.type(screen.getByLabelText(/Tarifa atual de manutenção/), '80')
-    const bloco = await screen.findByLabelText('Comparação com o banco atual', { selector: 'section' })
+    const bloco = await screen.findByLabelText('Comparação com o banco atual', {
+      selector: 'section',
+    })
     expect(within(bloco).getByText('R$ 40.490,86')).toBeInTheDocument()
   })
 
@@ -163,7 +179,12 @@ describe('dashboard e usuários', () => {
     await user.type(screen.getByLabelText(/Senha/), 'segredo1')
     await user.click(screen.getByRole('button', { name: 'Criar usuário' }))
     expect(await screen.findByText('Usuário maria criado.')).toBeInTheDocument()
-    expect(criarUsuario).toHaveBeenCalledWith({ usuario: 'maria', nome: 'Maria', senha: 'segredo1', papel: 'gerente' })
+    expect(criarUsuario).toHaveBeenCalledWith({
+      usuario: 'maria',
+      nome: 'Maria',
+      senha: 'segredo1',
+      papel: 'gerente',
+    })
     unmount()
 
     ponte(gerente)
@@ -177,7 +198,9 @@ describe('dashboard e usuários', () => {
     ponte(admin, {
       sair,
       criarUsuario: async () => {
-        throw new Error("Error invoking remote method 'usuarios:criar': Error: Esse usuário já existe")
+        throw new Error(
+          "Error invoking remote method 'usuarios:criar': Error: Esse usuário já existe",
+        )
       },
     })
     const user = userEvent.setup()
