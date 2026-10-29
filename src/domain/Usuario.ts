@@ -6,6 +6,8 @@ export interface Usuario {
   nome: string
   papel: PapelUsuario
   criadoEm: string
+  /** Verdadeiro até a pessoa trocar a senha inicial. */
+  trocarSenha?: boolean
 }
 
 export interface NovoUsuario {

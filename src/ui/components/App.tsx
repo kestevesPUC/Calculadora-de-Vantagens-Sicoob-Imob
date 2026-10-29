@@ -10,7 +10,10 @@ import { GestaoUsuarios } from './GestaoUsuarios'
 import { Logo } from './Logo'
 import { PainelVantagens } from './PainelVantagens'
 import { RelatorioImpressao } from './RelatorioImpressao'
+import { CreditoAutor } from './CreditoAutor'
 import { TelaLogin } from './TelaLogin'
+import { TelaTrocaSenha } from './TelaTrocaSenha'
+import { VersaoApp } from './VersaoApp'
 import { useSimulacao } from '../hooks/useSimulacao'
 
 type Estado =
@@ -55,6 +58,7 @@ export function App() {
     )
   }
   if (!usuario) return <TelaLogin onEntrar={setUsuario} />
+  if (usuario.trocarSenha) return <TelaTrocaSenha onTrocada={setUsuario} />
 
   return (
     <Sistema parametros={estado.parametros} usuario={usuario} onSair={() => setUsuario(null)} />
@@ -138,14 +142,19 @@ function Sistema({
               <span className="avatar" aria-hidden="true">
                 {usuario.nome.slice(0, 1).toUpperCase()}
               </span>
-              <span>
-                {usuario.nome} · {usuario.papel === 'admin' ? 'Administrador' : 'Gerente'}
+              <span className="nome">
+                <strong>{usuario.nome}</strong>
+                <small>{usuario.papel === 'admin' ? 'Administrador' : 'Gerente'}</small>
               </span>
             </div>
-            <button type="button" onClick={sair}>
+            <button type="button" className="sair" onClick={sair}>
               <LogOut size={18} aria-hidden="true" />
               <span>Sair</span>
             </button>
+            <div className="creditos">
+              <VersaoApp />
+              <CreditoAutor />
+            </div>
           </div>
         </aside>
 

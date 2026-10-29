@@ -160,7 +160,8 @@ select.campo-caixa:focus {
   flex-direction: column;
   gap: 2px;
 }
-.lateral button {
+.lateral nav button,
+.lateral .sair {
   display: flex;
   min-height: 44px;
   cursor: pointer;
@@ -172,7 +173,8 @@ select.campo-caixa:focus {
   text-align: left;
   transition: background-color 0.15s;
 }
-.lateral button:hover {
+.lateral nav button:hover,
+.lateral .sair:hover {
   background: rgb(255 255 255 / 0.08);
   color: #fff;
 }
@@ -195,6 +197,27 @@ select.campo-caixa:focus {
   align-items: center;
   gap: 10px;
   padding: 4px 8px;
+  color: #fff;
+}
+.lateral .nome {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  line-height: 1.25;
+}
+.lateral .nome small {
+  color: #a9c4c8;
+  font-size: 14px;
+}
+.lateral .creditos {
+  margin-top: 6px;
+  border-top: 1px solid rgb(255 255 255 / 0.15);
+  padding-top: 10px;
+  text-align: center;
+  color: #a9c4c8;
+  line-height: 1.6;
+}
+.lateral .creditos button {
   color: #fff;
 }
 .lateral .avatar {

@@ -3,7 +3,9 @@ import { LogIn } from 'lucide-react'
 import type { Usuario } from '../../domain/Usuario'
 import { Botao } from './Botao'
 import { Campo } from './Campo'
+import { CreditoAutor } from './CreditoAutor'
 import { Logo } from './Logo'
+import { VersaoApp } from './VersaoApp'
 
 interface Props {
   onEntrar: (usuario: Usuario) => void
@@ -84,6 +86,8 @@ export function TelaLogin({ onEntrar }: Props) {
               Entrar
             </Botao>
           </form>
+          <VersaoApp className="mt-6 opacity-70" />
+          <CreditoAutor className="opacity-70" />
         </div>
       </section>
     </main>

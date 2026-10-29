@@ -2,7 +2,8 @@
 import { createRequire } from 'node:module'
 
 const require_ = createRequire(import.meta.url)
-const { abrirBanco, autenticar, criarUsuario, listarUsuarios } = require_('../usuarios.cjs')
+const { abrirBanco, autenticar, criarUsuario, listarUsuarios, trocarSenha } =
+  require_('../usuarios.cjs')
 
 describe('usuários (SQLite)', () => {
   it('cria o admin inicial e autentica', () => {
@@ -23,13 +24,61 @@ describe('usuários (SQLite)', () => {
 
   it('cria novos usuários e impede duplicados e dados inválidos', () => {
     const db = abrirBanco(':memory:')
-    const novo = criarUsuario(db, { usuario: 'maria', nome: 'Maria', senha: 'segredo1', papel: 'gerente' })
+    const novo = criarUsuario(db, {
+      usuario: 'maria',
+      nome: 'Maria',
+      senha: 'segredo1',
+      papel: 'gerente',
+    })
     expect(novo.papel).toBe('gerente')
     expect(autenticar(db, 'maria', 'segredo1')).not.toBeNull()
-    expect(() => criarUsuario(db, { usuario: 'Maria', nome: 'X', senha: 'segredo1', papel: 'gerente' })).toThrow(/já existe/)
-    expect(() => criarUsuario(db, { usuario: 'a', nome: 'X', senha: 'segredo1', papel: 'gerente' })).toThrow(/Usuário/)
-    expect(() => criarUsuario(db, { usuario: 'joao', nome: '', senha: 'segredo1', papel: 'gerente' })).toThrow(/nome/)
-    expect(() => criarUsuario(db, { usuario: 'joao', nome: 'J', senha: '123', papel: 'gerente' })).toThrow(/senha/)
-    expect(() => criarUsuario(db, { usuario: 'joao', nome: 'J', senha: '123456', papel: 'root' })).toThrow(/Perfil/)
+    expect(() =>
+      criarUsuario(db, { usuario: 'Maria', nome: 'X', senha: 'segredo1', papel: 'gerente' }),
+    ).toThrow(/já existe/)
+    expect(() =>
+      criarUsuario(db, { usuario: 'a', nome: 'X', senha: 'segredo1', papel: 'gerente' }),
+    ).toThrow(/Usuário/)
+    expect(() =>
+      criarUsuario(db, { usuario: 'joao', nome: '', senha: 'segredo1', papel: 'gerente' }),
+    ).toThrow(/nome/)
+    expect(() =>
+      criarUsuario(db, { usuario: 'joao', nome: 'J', senha: '123', papel: 'gerente' }),
+    ).toThrow(/senha/)
+    expect(() =>
+      criarUsuario(db, { usuario: 'joao', nome: 'J', senha: '123456', papel: 'root' }),
+    ).toThrow(/Perfil/)
+  })
+
+  it('exige trocar a senha no primeiro acesso e libera depois da troca', () => {
+    const db = abrirBanco(':memory:')
+    const admin = autenticar(db, 'admin', '123456')
+    expect(admin.trocarSenha).toBe(true)
+    expect(() => trocarSenha(db, admin.id, 'errada', 'nova-senha')).toThrow(/atual incorreta/)
+    expect(() => trocarSenha(db, admin.id, '123456', '123')).toThrow(/pelo menos/)
+    expect(() => trocarSenha(db, admin.id, '123456', '123456')).toThrow(/diferente/)
+    expect(trocarSenha(db, admin.id, '123456', 'nova-senha').trocarSenha).toBe(false)
+    expect(autenticar(db, 'admin', '123456')).toBeNull()
+    expect(autenticar(db, 'admin', 'nova-senha')?.trocarSenha).toBe(false)
+  })
+
+  it('usuário criado por um administrador também troca a senha no primeiro acesso', () => {
+    const db = abrirBanco(':memory:')
+    criarUsuario(db, { usuario: 'maria', nome: 'Maria', senha: 'provisoria', papel: 'gerente' })
+    expect(autenticar(db, 'maria', 'provisoria').trocarSenha).toBe(true)
+  })
+
+  it('bancos antigos: quem ainda usa 123456 é obrigado a trocar', () => {
+    const { DatabaseSync } = require_('node:sqlite')
+    const { mkdtempSync } = require_('node:fs')
+    const { tmpdir } = require_('node:os')
+    const { join } = require_('node:path')
+    const arquivo = join(mkdtempSync(join(tmpdir(), 'sicoob-')), 'a.db')
+    const antigo = abrirBanco(arquivo)
+    antigo.exec('UPDATE usuarios SET trocar_senha = 0')
+    antigo.exec('ALTER TABLE usuarios DROP COLUMN trocar_senha')
+    antigo.close()
+    new DatabaseSync(arquivo).close()
+    const db = abrirBanco(arquivo)
+    expect(autenticar(db, 'admin', '123456').trocarSenha).toBe(true)
   })
 })

@@ -1,8 +1,10 @@
 'use strict'
-const { app, BrowserWindow, ipcMain, dialog } = require('electron')
+const { app, BrowserWindow, ipcMain, dialog, shell } = require('electron')
 const fs = require('node:fs')
 const path = require('node:path')
-const { abrirBanco, autenticar, criarUsuario, listarUsuarios } = require('./usuarios.cjs')
+const { abrirBanco, autenticar, criarUsuario, listarUsuarios, trocarSenha } = require('./usuarios.cjs')
+
+const SITE_AUTOR = 'https://kaio-gomes-site.vercel.app/'
 
 const DEV = process.env.ELECTRON_DEV === '1'
 let janela = null
@@ -25,10 +27,18 @@ function exigirAdmin() {
 }
 
 function registrarIpc() {
+  ipcMain.handle('app:versao', () => app.getVersion())
+  // URL fixa no processo principal: a interface não escolhe o que abrir.
+  ipcMain.handle('app:abrir-site', () => shell.openExternal(SITE_AUTOR))
   ipcMain.handle('parametros:ler', () => lerParametros())
 
   ipcMain.handle('auth:entrar', (_e, usuario, senha) => {
     sessao = autenticar(banco, usuario, senha)
+    return sessao
+  })
+  ipcMain.handle('auth:trocar-senha', (_e, atual, nova) => {
+    if (!sessao) throw new Error('Faça login para trocar a senha')
+    sessao = trocarSenha(banco, sessao.id, atual, nova)
     return sessao
   })
   ipcMain.handle('auth:sair', () => {
@@ -102,7 +112,16 @@ function buscarAtualizacao() {
   if (!app.isPackaged) return
   const { autoUpdater } = require('electron-updater')
   autoUpdater.autoInstallOnAppQuit = true
-  autoUpdater.on('error', (e) => console.error('Falha ao buscar atualização:', e.message))
+  const registrar = (msg) => {
+    try {
+      fs.appendFileSync(path.join(pastaDados(), 'atualizacao.log'), `${new Date().toISOString()} ${msg}\n`)
+    } catch {
+      // o log é só diagnóstico
+    }
+  }
+  autoUpdater.on('error', (e) => registrar(`erro: ${e.message}`))
+  autoUpdater.on('update-available', (i) => registrar(`nova versão ${i.version}, baixando`))
+  autoUpdater.on('update-not-available', (i) => registrar(`já está na última (${i.version})`))
   autoUpdater.on('update-downloaded', async () => {
     const { response } = await dialog.showMessageBox(janela, {
       type: 'info',
@@ -113,7 +132,10 @@ function buscarAtualizacao() {
     })
     if (response === 0) autoUpdater.quitAndInstall()
   })
-  const verificar = () => autoUpdater.checkForUpdates().catch((e) => console.error(e.message))
+  const verificar = () => {
+    registrar(`verificando (instalada ${app.getVersion()})`)
+    autoUpdater.checkForUpdates().catch((e) => registrar(`erro: ${e.message}`))
+  }
   // Como no CCP: ~15 s depois de abrir e a cada 6 h. Escolhendo "Depois", instala ao fechar.
   setTimeout(verificar, 15_000)
   setInterval(verificar, 6 * 60 * 60 * 1000)

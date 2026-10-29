@@ -32,12 +32,26 @@ function abrirBanco(caminho) {
       nome TEXT NOT NULL,
       senha_hash TEXT NOT NULL,
       papel TEXT NOT NULL CHECK (papel IN ('admin', 'gerente')),
-      criado_em TEXT NOT NULL DEFAULT (datetime('now'))
+      criado_em TEXT NOT NULL DEFAULT (datetime('now')),
+      trocar_senha INTEGER NOT NULL DEFAULT 1
     )
   `)
+  migrar(db)
   const { total } = db.prepare('SELECT COUNT(*) AS total FROM usuarios').get()
   if (total === 0) criarUsuario(db, ADMIN_INICIAL)
   return db
+}
+
+// Bancos criados antes da coluna existir: quem ainda usa a senha inicial passa a ser obrigado a trocá-la.
+function migrar(db) {
+  const colunas = db.prepare('PRAGMA table_info(usuarios)').all()
+  if (colunas.some((c) => c.name === 'trocar_senha')) return
+  db.exec('ALTER TABLE usuarios ADD COLUMN trocar_senha INTEGER NOT NULL DEFAULT 0')
+  for (const u of db.prepare('SELECT id, senha_hash FROM usuarios').all()) {
+    if (conferirSenha(ADMIN_INICIAL.senha, u.senha_hash)) {
+      db.prepare('UPDATE usuarios SET trocar_senha = 1 WHERE id = ?').run(u.id)
+    }
+  }
 }
 
 function publico(linha) {
@@ -47,6 +61,7 @@ function publico(linha) {
     nome: linha.nome,
     papel: linha.papel,
     criadoEm: linha.criado_em,
+    trocarSenha: Boolean(linha.trocar_senha),
   }
 }
 
@@ -76,6 +91,18 @@ function criarUsuario(db, dados) {
   }
 }
 
+/** Troca a própria senha (exigida no primeiro acesso). A nova precisa ser diferente da atual. */
+function trocarSenha(db, id, atual, nova) {
+  const linha = db.prepare('SELECT * FROM usuarios WHERE id = ?').get(Number(id))
+  if (!linha || !conferirSenha(String(atual ?? ''), linha.senha_hash)) throw new Error('Senha atual incorreta')
+  if (String(nova ?? '').length < SENHA_MINIMA) {
+    throw new Error(`A nova senha deve ter pelo menos ${SENHA_MINIMA} caracteres`)
+  }
+  if (nova === atual) throw new Error('A nova senha deve ser diferente da atual')
+  db.prepare('UPDATE usuarios SET senha_hash = ?, trocar_senha = 0 WHERE id = ?').run(gerarHash(nova), linha.id)
+  return publico(db.prepare('SELECT * FROM usuarios WHERE id = ?').get(linha.id))
+}
+
 function autenticar(db, usuario, senha) {
   const linha = db.prepare('SELECT * FROM usuarios WHERE usuario = ?').get(String(usuario ?? '').trim())
   // Mesmo custo de cálculo quando o usuário não existe, para não revelar quais existem.
@@ -88,4 +115,4 @@ function listarUsuarios(db) {
   return db.prepare('SELECT * FROM usuarios ORDER BY usuario').all().map(publico)
 }
 
-module.exports = { abrirBanco, criarUsuario, autenticar, listarUsuarios, ADMIN_INICIAL }
+module.exports = { abrirBanco, criarUsuario, trocarSenha, autenticar, listarUsuarios, ADMIN_INICIAL }
